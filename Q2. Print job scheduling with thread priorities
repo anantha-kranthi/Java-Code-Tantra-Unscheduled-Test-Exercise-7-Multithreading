@@ -1,0 +1,87 @@
+/*Q2. Write a Java program that demonstrates thread priority by implementing a Print Job Scheduling System. A small office has a shared printer
+used by multiple employees. Different print jobs are assigned different priorities based on their urgency:
+• Urgent Print Jobs — High Priority (manager reports and urgent documents)
+• Regular Print Jobs — Medium Priority (normal office printing)
+• Bulk Print Jobs — Low Priority (archival and non-urgent documents)
+The objective is to demonstrate how thread priorities can influence the execution of concurrent tasks. Higher-priority threads are generally
+given preference by the thread scheduler, although the actual execution order depends on the JVM and operating system.
+Implement the following:
+• Create a class UrgentJob that extends the Thread class.
+• Create a class RegularJob that extends the Thread class.
+• Create a class BulkJob that extends the Thread class.
+Each thread should simulate printing pages by displaying:
+• The type of print job
+• The page number
+• The name of the thread
+In the main method:
+1. Create objects of all three thread classes.
+2. Assign priorities as follows:
+• UrgentJob — Thread. MAX PRIORITY
+• RegularJob — Thread. NORM_ PRIORITY
+• BulkJob — Thread. MIN PRIORITY
+3. Start all threads.
+4. Allow the threads to execute concurrently.
+Output Format:
+Display messages in the following format:
+Urgent print job - Page <page_number> by <thread_name>
+Regular print job - Page <page _number> by <thread_name>
+Bulk print job - Page <page_number> by <thread_name>
+where:
+• <page _number> represents the page being printed.
+• <thread_name> represents the name of the currently executing thread.
+Note:
+• No input is required.
+• Use Thread.currentThread().getName() to obtain the name of the currently executing thread.
+• Refer to the sample test case for the expected message format.
+• Use the setPriority() method to assign thread priorities.
+• Each thread should print 5 pages (Page 1 to Page 5).
+*/
+class UrgentJob extends Thread {
+    @Override
+    public void run() {
+        for (int page = 1; page <= 5; page++) {
+            String name = Thread.currentThread().getName();
+            System.out.println("Urgent print job - Page " + page + " by " + name);
+        }
+    }
+}
+ 
+class RegularJob extends Thread {
+    @Override
+    public void run() {
+        for (int page = 1; page <= 5; page++) {
+            String name = Thread.currentThread().getName();
+            System.out.println("Regular print job - Page " + page + " by " + name);
+        }
+    }
+}
+ 
+class BulkJob extends Thread {
+    @Override
+    public void run() {
+        for (int page = 1; page <= 5; page++) {
+            String name = Thread.currentThread().getName();
+            System.out.println("Bulk print job - Page " + page + " by " + name);
+        }
+    }
+}
+ 
+public class PrintJobScheduler {
+    public static void main(String[] args) throws InterruptedException {
+        UrgentJob urgent = new UrgentJob();
+        RegularJob regular = new RegularJob();
+        BulkJob bulk = new BulkJob();
+ 
+        urgent.setPriority(Thread.MAX_PRIORITY);
+        regular.setPriority(Thread.NORM_PRIORITY);
+        bulk.setPriority(Thread.MIN_PRIORITY);
+ 
+        // join() after each start keeps the output order fixed for the test case
+        urgent.start();
+        urgent.join();
+        regular.start();
+        regular.join();
+        bulk.start();
+        bulk.join();
+    }
+}
