@@ -1,0 +1,112 @@
+/*Q1. Write a Java program to demonstrate multithreading by generating random numbers and performing arithmetic operations based on their
+parity.
+Create the following thread classes:
+
+• RandomNumberThread
+
+• SquareThread
+
+• CubeThread
+
+Requirements:
+
+1. Create a class named RandomNumberThread that extends Thread.
+
+2. The RandomNumberThread must generate exactly three random integers using a Random object initialized with seed value 50.
+3. Generate each random integer in the range 0 to 99 inclusive using random.nextInt(100).
+
+4. For each generated integer:
+
+• Display the generated integer.
+
+• If the number is even, create and start a SquareThread to calculate and display its square.
+
+• If the number is odd, create and start a CubeThread to calculate and display its cube.
+
+5. Introduce a delay of 1000 milliseconds between successive random number generations using Thread.sleep(1000).
+6. Create a class named SquareThread that extends Thread. Its constructor must accept an integer, and its run() method must display the
+square of that integer.
+7. Create a class named CubeThread that extends Thread. Its constructor must accept an integer, and its run() method must display the cube
+of that integer.
+8. In the main() method of the public class ClassMthread, create and start a RandomNumberThread .
+Input Format:
+• No input is required.
+Output Format:
+For each generated random integer, first display:
+Random Integer generated : number
+Then display the corresponding arithmetic result:
+• For an even number:
+Square of number = square
+• For an odd number:
+Cube of number = cube
+Repeat this process for all three generated integers.
+Example Output:
+Random Integer generated : 42
+Square of 42 = 1764
+Random Integer generated : 29
+Cube of 29 = 24389
+Random Integer generated : 74
+Square of 74 = 5476
+Constraints:
+• Generate exactly three random integers.
+• Use seed value 50.
+• Each random integer must be in the range 0 to 99, inclusive.
+• Use Thread.sleep(1000) to introduce the required delay between successive generations.
+• Match the specified output text, capitalization, punctuation, and spacing.
+Note:
+• Refer to the visible test cases to strictly match the input/output layout.
+*/
+//////////////////////////
+import java.util.Random;
+ 
+class SquareThread extends Thread {
+    int number;
+ 
+    SquareThread(int number) {
+        this.number = number;
+    }
+ 
+    @Override
+    public void run() {
+        System.out.println("Square of " + number + " = " + (number * number));
+    }
+}
+ 
+class CubeThread extends Thread {
+    int number;
+ 
+    CubeThread(int number) {
+        this.number = number;
+    }
+ 
+    @Override
+    public void run() {
+        System.out.println("Cube of " + number + " = " + (number * number * number));
+    }
+}
+ 
+class RandomNumberThread extends Thread {
+    @Override
+    public void run() {
+        Random random = new Random(50);
+        for (int i = 0; i < 3; i++) {
+            int num = random.nextInt(100);
+            System.out.println("Random Integer generated : " + num);
+            Thread t = (num % 2 == 0) ? new SquareThread(num) : new CubeThread(num);
+            t.start();
+            try {
+                t.join();                 // keep the result right after its number
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.out.println(e);
+            }
+        }
+    }
+}
+ 
+public class ClassMthread {
+    public static void main(String[] args) {
+        RandomNumberThread r = new RandomNumberThread();
+        r.start();
+    }
+}
